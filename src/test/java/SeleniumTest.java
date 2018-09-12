@@ -8,6 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.opera.OperaDriver;
 
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +18,31 @@ public class SeleniumTest {
    @Before
    public void setup()
    {
-       driver = new FirefoxDriver();
+       String browser = System.getProperty("browser");
+
+       if (browser == null)
+       {
+           driver = new ChromeDriver();
+       }
+       else if (browser.equals("chrome"))
+       {
+           driver = new ChromeDriver();
+       }
+       else if (browser.equals("firefox"))
+       {
+           driver = new FirefoxDriver();
+       }
+       else if (browser.equals("opera"))
+       {
+           driver = new OperaDriver();
+       }
+
+       else
+       {
+           driver = new ChromeDriver();
+       }
+
+       //driver = new FirefoxDriver();
        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
        driver.get("https://www.google.com");
    }
@@ -40,7 +65,7 @@ public class SeleniumTest {
         Thread.sleep( 1000);
     }
 
-    @Test
+    //@Test
     public void testclick()throws InterruptedException {
         String expected = "République française - France — Wikipédia";
 
@@ -50,10 +75,12 @@ public class SeleniumTest {
 
         WebElement buttonRecherche = driver.findElement(By.className("lsb"));
         buttonRecherche.click();
-        WebElement premierResultat = driver.findElement(By.xpath("//*[@id=\"rso\"]/div[2]/div/div/div/div/h3/a"));
+        WebElement premierResultat = driver.findElement(By.xpath("//*[@id=\"rso\"]/div[2]/div/div/div[2]/h3/a"));
         Assert.assertEquals(expected, premierResultat.getText());
         Thread.sleep( 1000);
     }
 
-    
+
 }
+
+
